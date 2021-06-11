@@ -1,5 +1,4 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
 import OfficeLayout from '../pages/OfficeLayout'
 import ToolKit from './Toolkit'
 

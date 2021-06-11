@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 // import { useHistory } from "react-router";
 import { gql, useMutation } from "@apollo/client";
-import OfficeLayout from "./OfficeLayout";
 
 const SIGNUP_MUTATION = gql`
   mutation CreateUser(
@@ -17,7 +16,7 @@ const SIGNUP_MUTATION = gql`
       firstName: $firstName
       lastName: $lastName
       team: $team
-    ){
+    ) {
       id
     }
   }
@@ -26,6 +25,7 @@ const SIGNUP_MUTATION = gql`
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {
+      id
       token
     }
   }
@@ -47,14 +47,14 @@ function LoginForm() {
       email: formState.email,
       password: formState.password,
     },
-    onCompleted: ({ login }) => {
+    onCompleted: (token) => {
+      console.log(token)
       // localStorage.setItem(AUTH_TOKEN, login.token);
       // history.push('/');
-      console.log("login");
     },
   });
 
-  const [signup,{ loading: mutationLoading, error: mutationError }] = useMutation(SIGNUP_MUTATION, {
+  const [signup] = useMutation(SIGNUP_MUTATION, {
     variables: {
       firstName: formState.firstName,
       lastName: formState.lastName,
@@ -69,14 +69,11 @@ function LoginForm() {
     },
   });
 
-  
-
   return (
     <div className="form">
       <h4>{formState.login ? "Login" : "Sign Up"}</h4>
       <form
         onSubmit={
-          
           formState.login
             ? (e) => {
                 e.preventDefault();

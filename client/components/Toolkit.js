@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Stage, Layer, Rect, Text, Circle } from "react-konva";
 import Konva from "konva";
-import OfficeLayout from '../pages/OfficeLayout'
 
 const ToolKit = () => {
   const [color, setColor] = useState("green");

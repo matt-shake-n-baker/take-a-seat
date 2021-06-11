@@ -3,10 +3,9 @@ const app = express();
 const morgan = require("morgan");
 const path = require("path");
 const port = process.env.PORT || 3000;
-const { db } = require('./db')
-const { ApolloServer } = require('apollo-server-express');
-const { typeDefs, rootResolver } = require('./graphql');
-
+const { db } = require("./db");
+const { ApolloServer } = require("apollo-server-express");
+const { typeDefs, rootResolver } = require("./graphql");
 // some good ol' logging middleware
 app.use(morgan("dev"));
 
@@ -17,15 +16,22 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use('/graphql', graphqlExpress({
-//   schema: schema,
-//   graphiql: true //process.env.NODE_ENV === 'development',
-// }));
+const server = new ApolloServer({
+  typeDefs,
+  resolvers: rootResolver,
+  context: ({ req }) => {
+    return {
+      ...req,
+      userId:
+        req && req.headers.authorization
+          ? req.headers.authorization
+          : null
+    };
+  }
+});
 
-const server = new ApolloServer({ typeDefs, resolvers: rootResolver})
+server.applyMiddleware({ app });
 
-server.applyMiddleware({ app })
-// serve up index.html if api route doesn't match
 app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
@@ -37,15 +43,13 @@ app.use(function (err, req, res, next) {
 });
 
 const init = async () => {
-    try {
-        await db.sync();
-        
-        app.listen(port, function(){
-            console.log('listening on port ', port)
-        })
-    } catch (error) {
-        console.log('uh oh-> ', error)
-    }
-}
-init()
-
+  try {
+    await db.sync();
+    app.listen(port, function () {
+      console.log("listening on port ", port);
+    });
+  } catch (error) {
+    console.log("uh oh-> ", error);
+  }
+};
+init();
