@@ -1,13 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import store from './store'
-import App from './components/App'
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import App from "./App";
+import { BrowserRouter as Router } from "react-router-dom";
 
+const client = new ApolloClient({
+  uri: "http://localhost:3000/graphql",
+  headers: {
+    authorization: localStorage.getItem("token") || "",
+  },
+  cache: new InMemoryCache(),
+  resolvers: {},
+});
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Router>
+    <ApolloProvider client={client}>
       <App />
-  </Provider>,
+    </ApolloProvider>
+  </Router>,
   document.getElementById("app")
 );

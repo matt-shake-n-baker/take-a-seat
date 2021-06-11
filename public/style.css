@@ -1,3 +1,24 @@
-#login-form {
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
     border: 1px black solid;
+    width: 50%;
+    margin-top: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    padding: 5%;
+}
+
+.toolkit {
+    border: 1px black solid
+}
+
+.sandbox {
+    display: flex;
 }

@@ -1,0 +1,58 @@
+[
+    {
+        "firstName": "Matt1",
+        "lastName": "Baker",
+        "email": "test@test.com",
+        "password": "test1234",
+        "team": "Operations",
+        "role": "Admin"
+      },
+      {
+        "firstName": "Matt2",
+        "lastName": "Baker",
+        "email": "test@test.com",
+        "password": "test1234",
+        "team": "Operations"
+      },
+      {
+        "firstName": "Matt3",
+        "lastName": "Baker",
+        "email": "test@test.com",
+        "password": "test1234",
+        "team": "Operations"
+      },
+      {
+        "firstName": "Matt4",
+        "lastName": "Baker",
+        "email": "test@test.com",
+        "password": "test1234",
+        "team": "Operations"
+      },
+      {
+        "firstName": "Matt5",
+        "lastName": "Baker",
+        "email": "test@test.com",
+        "password": "test1234",
+        "team": "Operations"
+      },
+      {
+        "firstName": "Matt6",
+        "lastName": "Baker",
+        "email": "test@test.com",
+        "password": "test1234",
+        "team": "Operations"
+      },
+      {
+        "firstName": "Matt7",
+        "lastName": "Baker",
+        "email": "test@test.com",
+        "password": "test1234",
+        "team": "Operations"
+      },
+      {
+        "firstName": "Matt8",
+        "lastName": "Baker",
+        "email": "test@test.com",
+        "password": "test1234",
+        "team": "Operations"      }
+]

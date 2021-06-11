@@ -4,7 +4,8 @@ const morgan = require("morgan");
 const path = require("path");
 const port = process.env.PORT || 3000;
 const { db } = require('./db')
-
+const { ApolloServer } = require('apollo-server-express');
+const { typeDefs, rootResolver } = require('./graphql');
 
 // some good ol' logging middleware
 app.use(morgan("dev"));
@@ -16,11 +17,14 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// mounting api
-// app.use("/api", require("./api"));
+// app.use('/graphql', graphqlExpress({
+//   schema: schema,
+//   graphiql: true //process.env.NODE_ENV === 'development',
+// }));
 
-app.use('/graphql', require("./graphql/schemas"));
+const server = new ApolloServer({ typeDefs, resolvers: rootResolver})
 
+server.applyMiddleware({ app })
 // serve up index.html if api route doesn't match
 app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "../public/index.html"));
@@ -34,7 +38,7 @@ app.use(function (err, req, res, next) {
 
 const init = async () => {
     try {
-        await db.sync({force:true});
+        await db.sync();
         
         app.listen(port, function(){
             console.log('listening on port ', port)
