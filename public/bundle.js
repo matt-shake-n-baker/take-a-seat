@@ -8508,7 +8508,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 var SIGNUP_MUTATION = (0,_apollo_client__WEBPACK_IMPORTED_MODULE_1__.default)(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  mutation CreateUser(\n    $email: String!\n    $password: String!\n    $firstName: String!\n    $lastName: String!\n    $team: String!\n  ) {\n    createUser(\n      email: $email\n      password: $password\n      firstName: $firstName\n      lastName: $lastName\n      team: $team\n    ) {\n      id\n    }\n  }\n"])));
-var LOGIN_MUTATION = (0,_apollo_client__WEBPACK_IMPORTED_MODULE_1__.default)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  mutation LoginMutation($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      id\n      token\n    }\n  }\n"])));
+var LOGIN_MUTATION = (0,_apollo_client__WEBPACK_IMPORTED_MODULE_1__.default)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  mutation LoginMutation($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      token\n    }\n  }\n"])));
 
 function LoginForm() {
   // const history = useHistory()

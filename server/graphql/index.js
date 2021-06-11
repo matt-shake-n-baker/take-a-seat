@@ -98,7 +98,7 @@ const rootResolver = {
         APP_SECRET,
         { expiresIn: '1d' }
       )
-      return token
+      return { token}
     },
   },
 };
