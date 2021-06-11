@@ -1,9 +1,7 @@
-const { User } = require("../db/index");
+const { User, Workspace } = require("../db/index");
 const { gql } = require("@apollo/client");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { APP_SECRET } = require("../utils");
-
 
 const typeDefs = gql`
   type Query {
@@ -12,8 +10,9 @@ const typeDefs = gql`
     table: Table
     reservation: Reservation
     workspace: Workspace
+    workspaces: [Workspace]
   }
-  
+
   type AuthPayload {
     token: String
     user: User
@@ -28,6 +27,7 @@ const typeDefs = gql`
     imageUrl: String
     team: String!
     token: String
+    workspaces: [Workspace]
   }
 
   type Mutation {
@@ -39,6 +39,7 @@ const typeDefs = gql`
       team: String!
     ): User!
     login(email: String!, password: String!): User
+    createWorkspace(spaceName: String!, creator: String! ): Workspace
   }
 
   type Table {
@@ -59,46 +60,67 @@ const typeDefs = gql`
     id: ID!
     spaceName: String!
     imageUrl: String
-    creator: User!
+    creator: String!
     users: [User]
     tables: [Table]
   }
-
   scalar Date
 `;
 
 const rootResolver = {
   Query: {
     async users() {
-      return await User.findAll();
+        console.log('retrieving users')
+        const users = await User.findAll({
+          include: Workspace
+        });
+      return users
     },
     async user(_, args) {
-      return await User.findByPk(args.id);
+      console.log(args)
+      return await User.findByPk(args.id, {
+        include: Workspace
+      });
+    },
+    async workspaces() {
+      return await Workspace.findAll();
     },
   },
   Mutation: {
     async createUser(_, args) {
       const password = await bcrypt.hash(args.password, 10);
       const user = await User.create({ ...args, password });
-      const token = jwt.sign({ userId: user.id }, APP_SECRET);
-      
+      const token = jwt.sign({ userId: user.id }, "APP_SECRET");
+
       return { user, token };
     },
     async login(_, args) {
+      console.log(args)
       const user = await User.findAll({
         where: {
           email: args.email,
         },
+        include: [Workspace]
       });
       if (!user) throw new Error("No error exists!");
       const validUser = await bcrypt.compare(args.password, user[0].password);
       if (!validUser) throw new Error("Invalid Password");
-      const token = jwt.sign(
-        { id: user.id },
-        APP_SECRET,
-        { expiresIn: '1d' }
-      )
-      return { token}
+      const token = jwt.sign({ id: user.id }, "APP_SECRET", { expiresIn: "1d" });
+      const id = user[0].id
+      return { token, id };
+    },
+    async createWorkspace(_, args) {
+        console.log(args)
+      try {
+        const workspace = await Workspace.create(args);
+        const user = await User.findByPk(args.creator)
+        user.addWorkspace(workspace)
+        // user.createWorkspaces(workspace)
+        // workspace.createUsers(user)
+        return workspace;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

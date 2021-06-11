@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-// import { useHistory } from "react-router";
-import { gql, useMutation } from "@apollo/client";
+import { useHistory } from "react-router";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 const SIGNUP_MUTATION = gql`
   mutation CreateUser(
@@ -25,13 +25,14 @@ const SIGNUP_MUTATION = gql`
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {
+      id
       token
     }
   }
 `;
 
 function LoginForm() {
-  // const history = useHistory()
+  const history = useHistory()
   const [formState, setFormState] = useState({
     login: true,
     email: "",
@@ -40,16 +41,16 @@ function LoginForm() {
     lastName: "",
     team: "",
   });
-
   const [login] = useMutation(LOGIN_MUTATION, {
     variables: {
       email: formState.email,
       password: formState.password,
     },
-    onCompleted: (token) => {
-      console.log(token)
-      // localStorage.setItem(AUTH_TOKEN, login.token);
-      // history.push('/');
+    onCompleted: (login) => {
+      console.log(login)
+      localStorage.setItem("auth-token", login.login.token);
+      localStorage.setItem("user-id", login.login.id);
+      history.push('/workspaces');
     },
   });
 
@@ -68,10 +69,11 @@ function LoginForm() {
     },
   });
 
-  return (
+  return (<div>
+    <h2>Take a Seat!</h2>
     <div className="form">
       <h4>{formState.login ? "Login" : "Sign Up"}</h4>
-      <form
+      <form className="form-elements"
         onSubmit={
           formState.login
             ? (e) => {
@@ -147,6 +149,7 @@ function LoginForm() {
           {formState.login ? "Register" : "Already Registered? Log in!"}
         </button>
       </div>
+    </div>
     </div>
   );
 }

@@ -1,33 +1,29 @@
 import React from "react";
-// import { useHistory } from "react-router";
+import { useHistory } from "react-router";
 import { Link, BrowserRouter as Router } from "react-router-dom";
 
 const Navigation = () => {
-  // const history = useHistory();
-  // const authToken = localStorage.getItem(AUTH_TOKEN);
-  const authToken = true;
+  const history = useHistory();
+  const authToken = localStorage.getItem("auth-token");
+  const userId = localStorage.getItem("user-id");
   return (
-    <nav>
-      <Router>
-        {authToken && (
-          <div>
-            <Link to="/workplaces">Workplaces</Link>
-            <Link to="/settings">Settings</Link>
-            <Link to="/about">About Us</Link>
-            <div
-              onClick={() => {
-                // localStorage.removeItem(AUTH_TOKEN);
-                console.log('clicked')
-                // history.push(`/login`);
-              }}
-            >
-              Logout
-            </div>
-          </div>
-        )}
-        
-      </Router>
-    </nav>
+    authToken && (
+      <nav>
+        <Link to="/workspaces">Workspaces</Link>
+        <Link to="/settings">Settings</Link>
+        <Link to="/about">About Us</Link>
+        <Link
+          to="/login"
+          onClick={() => {
+            localStorage.removeItem(authToken);
+            localStorage.removeItem(userId);
+            history.push(`/login`);
+          }}
+        >
+          Logout
+        </Link>
+      </nav>
+    )
   );
 };
 

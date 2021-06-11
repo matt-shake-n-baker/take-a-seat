@@ -12,8 +12,8 @@ Reservation.belongsTo(User)
 Table.hasMany(Reservation)
 Reservation.belongsTo(Table)
 
-Workspace.belongsToMany(User, {through: 'user_workspace'})
-User.belongsToMany(Workspace, {through: 'user_workspace'})
+Workspace.belongsToMany(User, {through: 'user_workspace' })
+User.belongsToMany(Workspace, {through: 'user_workspace' })
 
 Table.belongsTo(Workspace)
 Workspace.hasMany(Table)
